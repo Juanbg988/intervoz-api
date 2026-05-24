@@ -1,5 +1,10 @@
 <?php
 
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Content-Type: application/json");
+
 session_start();
 include '../conexion.php';
 
@@ -7,13 +12,22 @@ header('Content-Type: application/json');
 
 $sql = "
 SELECT
-ilm.id_lengua,
-ilm.id_municipio
+    ilm.id_lengua,
+    l.nombre AS lengua,
+
+    ilm.id_municipio,
+    m.nombre AS municipio
 
 FROM interprete i
 
 INNER JOIN interprete_lengua_municipio ilm
 ON i.id_interprete = ilm.id_interprete
+
+INNER JOIN lengua l
+ON ilm.id_lengua = l.id_lengua
+
+INNER JOIN municipio m
+ON ilm.id_municipio = m.id_municipio
 
 WHERE i.id_usuario='".$_SESSION['id_usuario']."'
 ";
@@ -28,10 +42,15 @@ while($row = mysqli_fetch_assoc($result)){
         'id_lengua'=>
         intval($row['id_lengua']),
 
-        'id_municipio'=>
-        intval($row['id_municipio'])
-    ];
+        'lengua'=>
+        $row['lengua'],
 
+        'id_municipio'=>
+        intval($row['id_municipio']),
+
+        'municipio'=>
+        $row['municipio']
+    ];
 }
 
 echo json_encode([
