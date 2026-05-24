@@ -1,12 +1,24 @@
 <?php
-$host = "sql211.infinityfree.com";
-$user = "if0_42008691"; // Usuario por defecto en XAMPP
-$pass = "AzQqNHENw5E";     // Contraseña por defecto vacía
-$db   = "if0_42008691_intervoz";
 
-$conn = mysqli_connect($host, $user, $pass, $db);
+$host = getenv("MYSQL_HOST");
+$user = getenv("MYSQL_USER");
+$pass = getenv("MYSQL_PASSWORD");
+$db   = getenv("MYSQL_DATABASE");
+
+$conn = mysqli_connect(
+    $host,
+    $user,
+    $pass,
+    $db
+);
 
 if (!$conn) {
-    die("Error de conexión: " . mysqli_connect_error());
+
+    die(
+        json_encode([
+            "ok" => false,
+            "mensaje" => mysqli_connect_error()
+        ])
+    );
 }
 ?>
