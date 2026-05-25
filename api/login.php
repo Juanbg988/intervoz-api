@@ -10,9 +10,9 @@ $correo = mysqli_real_escape_string($conn, $data['correo']);
 $pass = mysqli_real_escape_string($conn, $data['pass']);
 
 $sql = "SELECT u.id_usuario, u.nombre, p.rol
-        FROM Usuario u
-        INNER JOIN Perfil p ON p.id_usuario = u.id_usuario
-        WHERE u.correo = '$correo' AND u.contraseña = '$pass'";
+        FROM usuario u
+        INNER JOIN perfil p ON p.id_usuario = u.id_usuario
+        WHERE u.correo = '$correo' AND u.password = '$pass'";
 
 $result = mysqli_query($conn, $sql);
 
