@@ -6,7 +6,7 @@ $allowed = [
     "https://intervoz-frontend.onrender.com"
 ];
 
-if (in_array($origin, $allowed)) {
+if ($origin && in_array($origin, $allowed)) {
     header("Access-Control-Allow-Origin: $origin");
 } else {
     header("Access-Control-Allow-Origin: https://intervoz-frontend.onrender.com");
