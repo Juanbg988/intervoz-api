@@ -1,35 +1,22 @@
 <?php
 require_once __DIR__ . "/../cors.php";
-require_once __DIR__ . "/../conexion.php";
+include "../conexion.php";
 
 session_start();
 
-header("Content-Type: application/json");
-
 $data = json_decode(file_get_contents("php://input"), true);
 
-if(!$data){
-    echo json_encode(["ok"=>false,"mensaje"=>"No data"]);
-    exit;
-}
+$correo = mysqli_real_escape_string($conn, $data['correo']);
+$pass = mysqli_real_escape_string($conn, $data['pass']);
 
-$correo = $data['correo'] ?? '';
-$pass = $data['pass'] ?? '';
-
-$correo = mysqli_real_escape_string($conn, $correo);
-$pass = mysqli_real_escape_string($conn, $pass);
-
-$sql = "
-SELECT u.id_usuario, u.nombre, p.rol
-FROM usuario u
-INNER JOIN perfil p ON p.id_usuario = u.id_usuario
-WHERE u.correo = '$correo'
-AND u.password = '$pass'
-";
+$sql = "SELECT u.id_usuario, u.nombre, p.rol
+        FROM usuario u
+        INNER JOIN perfil p ON p.id_usuario = u.id_usuario
+        WHERE u.correo = '$correo' AND u.password = '$pass'";
 
 $result = mysqli_query($conn, $sql);
 
-if($result && mysqli_num_rows($result) > 0){
+if(mysqli_num_rows($result) > 0){
 
     $user = mysqli_fetch_assoc($result);
 
